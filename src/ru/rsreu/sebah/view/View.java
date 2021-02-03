@@ -15,25 +15,11 @@ import ru.rsreu.sebah.model.Entity;
 import ru.rsreu.sebah.model.Model;
 import ru.rsreu.sebah.model.Player;
 
-;
-
-
 public class View implements Listener {
     public static final int WIDTH_WINDOW = 500;
     public static final int HEIGHT_WINDOW = 700;
     public static final int HEIGHT_TOP_PANEL = 26;
     public static final int WIDTH_SQUARE = 100;
-
-//    public static final int WIN_MESSAGE_WINDOW_X = 150;
-//    public static final int WIN_MESSAGE_WINDOW_Y = 200;
-//    public static final int WIN_MESSAGE_WINDOWS_WIDTH = 200;
-//    public static final int WIN_MESSAGE_WINDOWS_HEIGHT = 100;
-//    private static final int X_WON_MESSAGE = 200;
-//    private static final int Y_WON_MESSAGE = 300;
-//    private static final int FONT_SIZE = 40;
-//    private static final double GRAY_INTENSITY = 0.8;
-//    private static final String WIN_MESSAGE = " you won!";
-
     private final Controller controller;
     private final BorderPane root;
     private final FileChooser fileChooser = new FileChooser();
@@ -42,12 +28,10 @@ public class View implements Listener {
     private static final String EXIT_GAME_MENU_OPTION = "Exit";
     private static final String MENU_NAME = "Game";
 
-
     public View(Controller controller, BorderPane root) {
         this.controller = controller;
         this.root = root;
     }
-
 
     @Override
     public void handle(Object object, EventType type) {

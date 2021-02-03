@@ -57,6 +57,21 @@ public abstract class Entity extends Thread {
         isStopped = stopped;
     }
 
+    protected void moveRight() {
+        position.setX(position.getX() + 1);
+    }
+
+    protected void moveLeft() {
+        position.setX(position.getX() - 1);
+    }
+
+    protected void moveDown() {
+        position.setY(position.getY() + 1);
+    }
+
+    protected void moveUp() {
+        position.setY(position.getY() - 1);
+    }
 
     public Point getPosition() {
         return position;

@@ -28,6 +28,8 @@ public class Main extends Application {
             Model model = new Model();
             root.requestFocus();
             Controller controller = new Controller(model);
+            root.setOnKeyPressed(a -> controller.addKey(a.getCode()));
+            root.setOnKeyReleased(a -> controller.removeKey(a.getCode()));
             View view = new View(controller, root);
             controller.setListener(view);
             model.initialize();

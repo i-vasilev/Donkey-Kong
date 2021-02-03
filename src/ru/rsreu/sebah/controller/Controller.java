@@ -29,38 +29,27 @@ public class Controller {
             model.pause();
         }
         if (keyCode == KeyCode.RIGHT) {
-            model.getPlayer();
+            model.getPlayer().setDirection(Direction.RIGHT);
         }
         if (keyCode == KeyCode.UP) {
-            model.getPlayer();
+            model.getPlayer().setDirection(Direction.UP);
         }
         if (keyCode == KeyCode.LEFT) {
-            model.getPlayer();
+            model.getPlayer().setDirection(Direction.LEFT);
         }
         if (keyCode == KeyCode.DOWN) {
-            model.getPlayer();
+            model.getPlayer().setDirection(Direction.DOWN);
         }
     }
 
     public void removeKey(KeyCode keyCode) {
-        if (keyCode == KeyCode.RIGHT) {
-            model.getPlayer();
-        }
-        if (keyCode == KeyCode.UP) {
-            model.getPlayer();
-        }
-        if (keyCode == KeyCode.LEFT) {
-            model.getPlayer();
-        }
-        if (keyCode == KeyCode.DOWN) {
-            model.getPlayer();
-        }
+        model.getPlayer().setDirection(null);
     }
-    
+
     public void exit() {
         System.exit(0);
     }
-    	
+
     public void openFile(File file) {
         model.stopAllEntities();
         model = (Model) openObjectFromFile(file.getAbsolutePath());
@@ -70,6 +59,7 @@ public class Controller {
             model.start();
         }
     }
+
     private Object openObjectFromFile(String path) {
         try (FileInputStream fis = new FileInputStream(path)) {
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -78,6 +68,7 @@ public class Controller {
             return null;
         }
     }
+
     void saveObjectToFile(Object objForSaving, String path) {
         try (FileOutputStream outputStream = new FileOutputStream(path)) {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
@@ -87,7 +78,7 @@ public class Controller {
         }
     }
 
-	public void saveFile(File file) {
+    public void saveFile(File file) {
         saveObjectToFile(model, file.getAbsolutePath());
     }
 }

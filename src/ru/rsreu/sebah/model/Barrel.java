@@ -44,16 +44,4 @@ public class Barrel extends Entity {
             moveDown();
         }
     }
-
-    private void moveRight() {
-        position.setX(position.getX() + 1);
-    }
-
-    private void moveLeft() {
-        position.setX(position.getX() - 1);
-    }
-
-    private void moveDown() {
-        position.setY(position.getY() + 1);
-    }
 }

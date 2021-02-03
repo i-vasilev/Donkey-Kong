@@ -2,7 +2,6 @@ package ru.rsreu.sebah.model;
 
 import ru.rsreu.sebah.view.EventType;
 import ru.rsreu.sebah.view.Listener;
-import ru.rsreu.sebah.view.View;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,9 +16,9 @@ public class Model implements Serializable {
     public static final transient int START_POSITION_X = 0;
 
     private boolean[][] map;
-    private transient Listener GameListener;
+    private transient Listener gameListener;
     private final List<Entity> entities;
-    private final Entity player;
+    private final Player player;
     private int height;
     private int width;
     private Point finalPoints;
@@ -114,27 +113,30 @@ public class Model implements Serializable {
     }
 
     public void setGameListener(Listener gameListener) {
-        this.GameListener = gameListener;
+        this.gameListener = gameListener;
         for (Entity p :
                 entities) {
             p.setGameListener(gameListener);
         }
+        player.setGameListener(gameListener);
     }
 
 
-    public Object getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
     public void initialize() {
-        GameListener.handle(this, EventType.INIT);
+        gameListener.handle(this, EventType.INIT);
         entities.forEach(Entity::initialize);
+        player.initialize();
     }
 
     public void start() {
         for (Entity p : entities) {
             p.start();
         }
+        player.start();
     }
 
     public List<Entity> getEntities() {
@@ -146,7 +148,7 @@ public class Model implements Serializable {
             if (pause) {
                 thread.notifyAll();
             } else {
-                GameListener.handle(this, EventType.PAUSE);
+                gameListener.handle(this, EventType.PAUSE);
             }
             pause = !pause;
         }
@@ -166,7 +168,7 @@ public class Model implements Serializable {
 
     public void stopAllEntities(Entity WinE) {
         stopAllEntities();
-        GameListener.handle(WinE, EventType.WIN);
+        gameListener.handle(WinE, EventType.WIN);
     }
 
     public List<PointDirection> getPointsForBarrels() {
