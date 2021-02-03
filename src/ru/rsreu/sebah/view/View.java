@@ -8,12 +8,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.stage.FileChooser;
 import ru.rsreu.sebah.controller.Controller;
 import ru.rsreu.sebah.model.Barrel;
 import ru.rsreu.sebah.model.Entity;
 import ru.rsreu.sebah.model.Model;
+import ru.rsreu.sebah.model.Player;
 
 ;
 
@@ -21,7 +21,7 @@ import ru.rsreu.sebah.model.Model;
 public class View implements Listener {
     public static final int WIDTH_WINDOW = 500;
     public static final int HEIGHT_WINDOW = 700;
-    public static final int HEIGHT_TOP_PANEL = 0;
+    public static final int HEIGHT_TOP_PANEL = 26;
     public static final int WIDTH_SQUARE = 100;
 
 //    public static final int WIN_MESSAGE_WINDOW_X = 150;
@@ -60,16 +60,22 @@ public class View implements Listener {
             root.setTop(menuBar);
         }
         if (type == EventType.CREATE_ENTITY) {
-            ObjectListener objectListener = null;
+            ObjectListener objectListener;
             if (object.getClass().equals(Barrel.class)) {
-                objectListener = createBarrelView((Entity) object);
+                objectListener = createBarrelView((Barrel) object);
+            } else {
+                objectListener = createPlayerView((Player) object);
             }
             ((Entity) object).setObjectListener(objectListener);
         }
 
     }
 
-    private ObjectListener createBarrelView(Entity object) {
+    private PlayerView createPlayerView(Player object) {
+        return new PlayerView(root, object);
+    }
+
+    private BarrelView createBarrelView(Barrel object) {
         return new BarrelView(root, object);
     }
 

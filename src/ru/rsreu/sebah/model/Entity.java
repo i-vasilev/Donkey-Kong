@@ -6,14 +6,14 @@ import ru.rsreu.sebah.view.*;
 
 
 public abstract class Entity extends Thread {
-    protected final Point position;
+    protected Point position;
     protected final Model modelGame;
     private transient Listener gameListener;
     private int countIterationsAfterCollide = 0;
     private boolean isStopped = false;
     private transient ObjectListener objectListener;
 
-    public Entity(Model modelGame, int x, int y) {
+    public Entity(Model modelGame, double x, double y) {
         this.position = new Point(x, y);
         this.modelGame = modelGame;
         setDaemon(true);

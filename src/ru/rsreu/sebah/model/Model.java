@@ -2,6 +2,7 @@ package ru.rsreu.sebah.model;
 
 import ru.rsreu.sebah.view.EventType;
 import ru.rsreu.sebah.view.Listener;
+import ru.rsreu.sebah.view.View;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -55,36 +56,45 @@ public class Model implements Serializable {
                 }
                 while (line != null) {
                     splittedLine = line.split(" ");
-
-                    pointsForBarrels.add(new PointDirection(Integer.parseInt(splittedLine[0]),
-                            Integer.parseInt(splittedLine[1]), splittedLine[2].charAt(0)));
+                    pointsForBarrels.add(
+                            new PointDirection(
+                                    Integer.parseInt(splittedLine[0]),
+                                    Integer.parseInt(splittedLine[1]),
+                                    getDirectionByName(splittedLine[2].charAt(0))
+                            )
+                    );
                     line = reader.readLine();
                 }
             }
         }
     }
 
-    private Direction getDirectionByName(String name) {
-        if (name.equals("r")) {
+    private Direction getDirectionByName(char name) {
+        if (name == 'r') {
             return Direction.RIGHT;
         }
-        if (name.equals("l")) {
+        if (name == 'l') {
             return Direction.LEFT;
         }
-        if (name.equals("d")) {
+        if (name == 'd') {
             return Direction.DOWN;
         }
         return null;
     }
 
     public Model() throws IOException {
+        loadMap();
         entities = new ArrayList<>();
-        entities.add(new Barrel(this, 30, 30));
+        entities.add(
+                new Barrel(
+                        this,
+                        0
+                )
+        );
         player = new Player(this,
                 START_POSITION_X,
                 START_POSITION_Y
         );
-        loadMap();
     }
 
     public boolean[][] getMap() {
@@ -163,14 +173,13 @@ public class Model implements Serializable {
         return pointsForBarrels;
     }
 
-    public char getNextDirection(Point point) {
-        for (PointDirection pointD :
-                pointsForBarrels) {
-            if (point.equals(pointD)) {
-                return pointD.getDirection();
+    public int getNextDirection(Point point) {
+        for (int i = 0; i < pointsForBarrels.size(); i++) {
+            if (point.equals(pointsForBarrels.get(i))) {
+                return i;
             }
         }
-        return '/';
+        return -1;
     }
 
 

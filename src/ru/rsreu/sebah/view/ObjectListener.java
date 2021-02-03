@@ -1,6 +1,8 @@
 package ru.rsreu.sebah.view;
 
-public interface ObjectListener {
+import ru.rsreu.sebah.model.Entity;
 
-    void handle(Object object, ObjectEventType type);
+public interface ObjectListener<E extends Entity> {
+
+    void handle(E object, ObjectEventType type);
 }

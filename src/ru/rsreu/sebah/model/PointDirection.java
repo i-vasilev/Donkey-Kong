@@ -1,14 +1,14 @@
 package ru.rsreu.sebah.model;
 
 public class PointDirection extends Point{
-    private final char direction;
+    private final Direction direction;
 
-    public PointDirection(double x, double y, char direction) {
+    public PointDirection(double x, double y, Direction direction) {
         super(x, y);
         this.direction = direction;
     }
 
-    public char getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 }
