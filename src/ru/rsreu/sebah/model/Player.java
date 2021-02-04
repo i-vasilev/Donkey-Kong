@@ -9,7 +9,9 @@ public class Player extends Entity {
     private Direction direction;
 
     public Player(Model modelGame, int x, int y) {
-        super(modelGame, x, y);
+        super(modelGame,
+                (double) x * View.WIDTH_SQUARE,
+                (double) y * View.WIDTH_SQUARE + View.HEIGHT_TOP_PANEL);
     }
 
     @Override
@@ -42,9 +44,9 @@ public class Player extends Entity {
 
     private boolean isCollideWalls() {
         int posMinY = (((int) (position.getX())) / View.WIDTH_SQUARE);
-        int posMinX = (((int) (position.getY())) / View.WIDTH_SQUARE);
+        int posMinX = (((int) (position.getY() - View.HEIGHT_TOP_PANEL)) / View.WIDTH_SQUARE);
         int posMaxY = (((int) (position.getX() + RADIUS)) / View.WIDTH_SQUARE);
-        int posMaxX = (((int) (position.getY() + RADIUS)) / View.WIDTH_SQUARE);
+        int posMaxX = (((int) (position.getY() - View.HEIGHT_TOP_PANEL + RADIUS)) / View.WIDTH_SQUARE);
         final boolean b = position.getX() < 0 || position.getY() < 0
                 || posMaxY >= modelGame.getWidth()
                 || posMaxX >= modelGame.getHeight();

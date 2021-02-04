@@ -23,5 +23,3 @@ public abstract class EntityView<E extends Entity, R extends Shape> implements O
         }
     }
 }
-    
-    

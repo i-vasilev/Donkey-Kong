@@ -10,9 +10,8 @@ public class PlayerView extends EntityView<Player, Rectangle> {
     public PlayerView(Pane root, Player object) {
         super(root);
         final Point position = object.getPosition();
-        shape = new Rectangle();
-        shape.setX(position.getX());
-        shape.setY(position.getY());
+        shape = new Rectangle(position.getX(),
+                position.getY());
         shape.setWidth(Barrel.RADIUS);
         shape.setHeight(Barrel.RADIUS);
     }

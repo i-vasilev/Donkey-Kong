@@ -2,6 +2,7 @@ package ru.rsreu.sebah.model;
 
 import ru.rsreu.sebah.view.EventType;
 import ru.rsreu.sebah.view.Listener;
+import ru.rsreu.sebah.view.View;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,9 +22,10 @@ public class Model implements Serializable {
     private final Player player;
     private int height;
     private int width;
-    private Point finalPoints;
+    private Point finalPoint;
+    private Point startPoint;
     private List<PointDirection> pointsForBarrels = new ArrayList<>();
-    public static final transient Object thread = new Object();
+    public static final transient Object LOCK = new Object();
     private boolean pause;
 
 
@@ -38,9 +40,11 @@ public class Model implements Serializable {
                 height = Integer.parseInt(splittedLine[0]);
                 width = Integer.parseInt(splittedLine[1]);
                 map = new boolean[height][width];
-                line = reader.readLine();
-                splittedLine = line.split(" ");
-                finalPoints = new Point(Integer.parseInt(splittedLine[0]),
+                splittedLine = reader.readLine().split(" ");
+                finalPoint = new Point(Integer.parseInt(splittedLine[0]),
+                        Integer.parseInt(splittedLine[1]));
+                splittedLine = reader.readLine().split(" ");
+                startPoint = new Point(Integer.parseInt(splittedLine[0]),
                         Integer.parseInt(splittedLine[1]));
                 line = reader.readLine();
                 while (i < height) {
@@ -90,9 +94,15 @@ public class Model implements Serializable {
                         0
                 )
         );
+        entities.add(
+                new Barrel(
+                        this,
+                        3
+                )
+        );
         player = new Player(this,
-                START_POSITION_X,
-                START_POSITION_Y
+                (int) startPoint.getX() ,
+                (int) startPoint.getY()
         );
     }
 
@@ -109,7 +119,7 @@ public class Model implements Serializable {
     }
 
     public Point getFinalPoint() {
-        return finalPoints;
+        return finalPoint;
     }
 
     public void setGameListener(Listener gameListener) {
@@ -144,9 +154,9 @@ public class Model implements Serializable {
     }
 
     public void pause() {
-        synchronized (thread) {
+        synchronized (LOCK) {
             if (pause) {
-                thread.notifyAll();
+                LOCK.notifyAll();
             } else {
                 gameListener.handle(this, EventType.PAUSE);
             }
@@ -162,8 +172,7 @@ public class Model implements Serializable {
         for (Entity p : entities) {
             p.setStopped(true);
         }
-
-
+        player.setStopped(true);
     }
 
     public void stopAllEntities(Entity WinE) {

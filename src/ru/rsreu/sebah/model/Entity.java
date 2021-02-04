@@ -9,7 +9,6 @@ public abstract class Entity extends Thread {
     protected Point position;
     protected final Model modelGame;
     private transient Listener gameListener;
-    private int countIterationsAfterCollide = 0;
     private boolean isStopped = false;
     private transient ObjectListener objectListener;
 
@@ -28,17 +27,17 @@ public abstract class Entity extends Thread {
         while (!isInterrupted()) {
             if (modelGame.isPause()) {
                 try {
-                    synchronized (Model.thread) {
-                        Model.thread.wait();
+                    synchronized (Model.LOCK) {
+                        Model.LOCK.wait();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            synchronized (Model.thread) {
+            synchronized (Model.LOCK) {
                 move();
             }
-            objectListener.handle(this, ObjectEventType.UPDATE);
+                objectListener.handle(this, ObjectEventType.UPDATE);
             try {
                 sleep(10);
             } catch (InterruptedException e) {
