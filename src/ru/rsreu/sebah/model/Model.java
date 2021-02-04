@@ -12,8 +12,8 @@ import java.util.List;
 
 public class Model implements Serializable {
     private static final transient String MAP_FILENAME = "./res/map.txt";
-    private static final transient int START_POSITION_Y = 0;
-    public static final transient int START_POSITION_X = 0;
+    private static final transient int START_POSITION_Y = 25;
+    public static final transient int START_POSITION_X = 25;
 
     private boolean[][] map;
     private transient Listener gameListener;
