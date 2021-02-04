@@ -7,7 +7,7 @@ import ru.rsreu.sebah.model.Entity;
 
 public abstract class EntityView<E extends Entity, R extends Shape> implements ObjectListener<E> {
 
-    protected R shape;
+    public R shape;
 
     protected EntityView(Pane root) {
         Platform.runLater(() -> root.getChildren().add(shape));
@@ -21,5 +21,10 @@ public abstract class EntityView<E extends Entity, R extends Shape> implements O
                 shape.setTranslateY(object.getPosition().getY());
             });
         }
+    }
+
+
+    public boolean isCollided(EntityView entityView) {
+        return shape.getBoundsInParent().intersects(entityView.shape.getBoundsInParent());
     }
 }

@@ -36,6 +36,7 @@ public class Player extends Entity {
                 moveDown();
             }
         }
+        checkCollidesWithBarrels();
     }
 
     public void setDirection(Direction direction) {
@@ -57,4 +58,34 @@ public class Player extends Entity {
         return true;
     }
 
+    private void checkCollidesWithBarrels() {
+        for (Entity barrel : modelGame.getBarrels()) {
+            if (this != barrel) {
+                if (collides(barrel.getPosition(), getPosition())) {
+                    modelGame.stopAllEntities();
+                }
+            }
+        }
+
+    }
+
+    private boolean collides(Point c1, Point r1) {
+        double closestX = clamp(c1.getX(), r1.getX(), r1.getX() + RADIUS);
+        double closestY = clamp(c1.getY(), r1.getY() - RADIUS, r1.getY());
+
+        double distanceX = c1.getX() - closestX;
+        double distanceY = c1.getY() - closestY;
+
+        return Math.pow(distanceX, 2) + Math.pow(distanceY, 2) < Math.pow(RADIUS, 2);
+    }
+
+    private double clamp(double value, double min, double max) {
+        double x = value;
+        if (x < min) {
+            x = min;
+        } else if (x > max) {
+            x = max;
+        }
+        return x;
+    }
 }

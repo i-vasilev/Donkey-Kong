@@ -9,7 +9,6 @@ public abstract class Entity extends Thread {
     protected Point position;
     protected final Model modelGame;
     private transient Listener gameListener;
-    private boolean isStopped = false;
     private transient ObjectListener objectListener;
 
     public Entity(Model modelGame, double x, double y) {
@@ -37,7 +36,7 @@ public abstract class Entity extends Thread {
             synchronized (Model.LOCK) {
                 move();
             }
-                objectListener.handle(this, ObjectEventType.UPDATE);
+            objectListener.handle(this, ObjectEventType.UPDATE);
             try {
                 sleep(10);
             } catch (InterruptedException e) {
@@ -48,12 +47,8 @@ public abstract class Entity extends Thread {
 
     protected abstract void move();
 
-    public Shape getPolygon() {
-        return (Shape) objectListener;
-    }
-
-    public void setStopped(boolean stopped) {
-        isStopped = stopped;
+    public EntityView getEntityView() {
+        return (EntityView) objectListener;
     }
 
     protected void moveRight() {

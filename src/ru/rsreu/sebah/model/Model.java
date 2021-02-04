@@ -149,7 +149,7 @@ public class Model implements Serializable {
         player.start();
     }
 
-    public List<Entity> getEntities() {
+    public List<Entity> getBarrels() {
         return entities;
     }
 
@@ -170,14 +170,14 @@ public class Model implements Serializable {
 
     public void stopAllEntities() {
         for (Entity p : entities) {
-            p.setStopped(true);
+            p.interrupt();
         }
-        player.setStopped(true);
+        player.interrupt();
     }
 
-    public void stopAllEntities(Entity WinE) {
+    public void stopAllEntities(Entity entity) {
         stopAllEntities();
-        gameListener.handle(WinE, EventType.WIN);
+        gameListener.handle(entity, EventType.WIN);
     }
 
     public List<PointDirection> getPointsForBarrels() {
