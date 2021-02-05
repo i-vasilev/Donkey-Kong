@@ -37,6 +37,16 @@ public class Player extends Entity {
             }
         }
         checkCollidesWithBarrels();
+        checkWinning();
+    }
+
+    private void checkWinning() {
+        final int x = (int) (position.getX() / View.WIDTH_SQUARE * 1.5);
+        final int y = (int) (position.getY() / View.WIDTH_SQUARE);
+        if (modelGame.getFinalPoint().getX() == x
+                && modelGame.getFinalPoint().getY() == y) {
+            modelGame.winGame();
+        }
     }
 
     public void setDirection(Direction direction) {
@@ -61,7 +71,7 @@ public class Player extends Entity {
     private void checkCollidesWithBarrels() {
         for (Entity barrel : modelGame.getBarrels()) {
             if (this != barrel && collides(barrel.getPosition(), getPosition())) {
-                modelGame.stopAllEntities();
+                modelGame.looseGame();
             }
         }
     }

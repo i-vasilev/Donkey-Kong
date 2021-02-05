@@ -1,11 +1,14 @@
 package ru.rsreu.sebah.model;
 
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
-import ru.rsreu.sebah.view.*;
+import ru.rsreu.sebah.view.EventType;
+import ru.rsreu.sebah.view.Listener;
+import ru.rsreu.sebah.view.ObjectEventType;
+import ru.rsreu.sebah.view.ObjectListener;
+
+import java.io.Serializable;
 
 
-public abstract class Entity extends Thread {
+public abstract class Entity extends Thread implements Serializable {
     protected Point position;
     protected final Model modelGame;
     private transient Listener gameListener;

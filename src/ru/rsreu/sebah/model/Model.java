@@ -13,8 +13,7 @@ import java.util.List;
 
 public class Model implements Serializable {
     private static final transient String MAP_FILENAME = "./res/map.txt";
-    private static final transient int START_POSITION_Y = 25;
-    public static final transient int START_POSITION_X = 25;
+    public static final transient Object LOCK = new Object();
 
     private boolean[][] map;
     private transient Listener gameListener;
@@ -24,8 +23,7 @@ public class Model implements Serializable {
     private int width;
     private Point finalPoint;
     private Point startPoint;
-    private List<PointDirection> pointsForBarrels = new ArrayList<>();
-    public static final transient Object LOCK = new Object();
+    private final List<PointDirection> pointsForBarrels = new ArrayList<>();
     private boolean pause;
 
 
@@ -175,9 +173,14 @@ public class Model implements Serializable {
         player.interrupt();
     }
 
-    public void stopAllEntities(Entity entity) {
+    public void winGame() {
         stopAllEntities();
-        gameListener.handle(entity, EventType.WIN);
+        gameListener.handle(this, EventType.WIN);
+    }
+
+    public void looseGame() {
+        stopAllEntities();
+        gameListener.handle(this, EventType.LOOSE);
     }
 
     public List<PointDirection> getPointsForBarrels() {

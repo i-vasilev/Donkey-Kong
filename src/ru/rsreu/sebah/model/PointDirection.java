@@ -1,6 +1,8 @@
 package ru.rsreu.sebah.model;
 
-public class PointDirection extends Point{
+import java.io.Serializable;
+
+public class PointDirection extends Point implements Serializable {
     private final Direction direction;
 
     public PointDirection(double x, double y, Direction direction) {
