@@ -47,10 +47,6 @@ public abstract class Entity extends Thread {
 
     protected abstract void move();
 
-    public EntityView getEntityView() {
-        return (EntityView) objectListener;
-    }
-
     protected void moveRight() {
         position.setX(position.getX() + 1);
     }
@@ -69,10 +65,6 @@ public abstract class Entity extends Thread {
 
     public Point getPosition() {
         return position;
-    }
-
-    public Polygon getRectangle() {
-        return (Polygon) objectListener;
     }
 
     public void setGameListener(Listener gameListener) {

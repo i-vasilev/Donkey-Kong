@@ -60,18 +60,15 @@ public class Player extends Entity {
 
     private void checkCollidesWithBarrels() {
         for (Entity barrel : modelGame.getBarrels()) {
-            if (this != barrel) {
-                if (collides(barrel.getPosition(), getPosition())) {
-                    modelGame.stopAllEntities();
-                }
+            if (this != barrel && collides(barrel.getPosition(), getPosition())) {
+                modelGame.stopAllEntities();
             }
         }
-
     }
 
     private boolean collides(Point c1, Point r1) {
         double closestX = clamp(c1.getX(), r1.getX(), r1.getX() + RADIUS);
-        double closestY = clamp(c1.getY(), r1.getY() - RADIUS, r1.getY());
+        double closestY = clamp(c1.getY(), r1.getY(), r1.getY() + RADIUS);
 
         double distanceX = c1.getX() - closestX;
         double distanceY = c1.getY() - closestY;
