@@ -6,7 +6,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Line;
@@ -54,7 +53,7 @@ public class View implements Listener {
             root.getChildren().clear();
             initGame((Model) object);
             root.setOnKeyPressed(a -> controller.addKey(a.getCode()));
-            root.setOnKeyReleased(a -> controller.removeKey(a.getCode()));
+            root.setOnKeyReleased(a -> controller.removeKey());
             MenuBar menuBar = createMenuBar(controller, root);
             root.setTop(menuBar);
         }

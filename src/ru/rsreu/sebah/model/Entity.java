@@ -14,7 +14,7 @@ public abstract class Entity extends Thread implements Serializable {
     private transient Listener gameListener;
     private transient ObjectListener objectListener;
 
-    public Entity(Model modelGame, double x, double y) {
+    protected Entity(Model modelGame, double x, double y) {
         this.position = new Point(x, y);
         this.modelGame = modelGame;
         setDaemon(true);

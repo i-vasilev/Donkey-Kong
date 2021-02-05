@@ -2,7 +2,6 @@ package ru.rsreu.sebah.model;
 
 import ru.rsreu.sebah.view.EventType;
 import ru.rsreu.sebah.view.Listener;
-import ru.rsreu.sebah.view.View;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

@@ -12,11 +12,9 @@ import java.io.IOException;
 
 public class Main extends Application {
 
-
     public static void main(String[] args) {
         launch(args);
     }
-
 
     @Override
     public void start(Stage primaryStage) {
@@ -29,7 +27,7 @@ public class Main extends Application {
             root.requestFocus();
             Controller controller = new Controller(model);
             root.setOnKeyPressed(a -> controller.addKey(a.getCode()));
-            root.setOnKeyReleased(a -> controller.removeKey(a.getCode()));
+            root.setOnKeyReleased(a -> controller.removeKey());
             View view = new View(controller, root);
             controller.setListener(view);
             model.initialize();

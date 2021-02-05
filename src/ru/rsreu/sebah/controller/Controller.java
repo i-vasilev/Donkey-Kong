@@ -42,7 +42,7 @@ public class Controller {
         }
     }
 
-    public void removeKey(KeyCode keyCode) {
+    public void removeKey() {
         model.getPlayer().setDirection(null);
     }
 
