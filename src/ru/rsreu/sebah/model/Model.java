@@ -13,6 +13,7 @@ import java.util.List;
 public class Model implements Serializable {
     private static final transient String MAP_FILENAME = "./res/map.txt";
     public static final transient Object LOCK = new Object();
+    public static final String DELIMITER = " ";
 
     private boolean[][] map;
     private transient Listener gameListener;
@@ -31,42 +32,55 @@ public class Model implements Serializable {
         try (BufferedReader reader = new BufferedReader(fileReader)) {
             String line = reader.readLine();
             if (line != null) {
-                String[] splittedLine = line.split(" ");
-                int i = 0;
-                int j;
+                String[] splittedLine = getSplittedLine(line);
                 height = Integer.parseInt(splittedLine[0]);
                 width = Integer.parseInt(splittedLine[1]);
-                map = new boolean[height][width];
-                splittedLine = reader.readLine().split(" ");
-                finalPoint = new Point(Integer.parseInt(splittedLine[0]),
-                        Integer.parseInt(splittedLine[1]));
-                splittedLine = reader.readLine().split(" ");
-                startPoint = new Point(Integer.parseInt(splittedLine[0]),
-                        Integer.parseInt(splittedLine[1]));
-                line = reader.readLine();
-                while (i < height) {
-                    j = 0;
-                    splittedLine = line.split(" ");
-                    for (String sign : splittedLine) {
-                        map[i][j] = sign.equals("1");
-                        j++;
-                    }
-                    i++;
-                    line = reader.readLine();
-                }
-                while (line != null) {
-                    splittedLine = line.split(" ");
-                    pointsForBarrels.add(
-                            new PointDirection(
-                                    Integer.parseInt(splittedLine[0]),
-                                    Integer.parseInt(splittedLine[1]),
-                                    getDirectionByName(splittedLine[2].charAt(0))
-                            )
-                    );
-                    line = reader.readLine();
-                }
+                finalPoint = parsePoint(reader.readLine());
+                startPoint = parsePoint(reader.readLine());
+                parseMap(reader);
+                parsePointsForBarrels(reader);
             }
         }
+    }
+
+    private String[] getSplittedLine(String line) {
+        return line.split(DELIMITER);
+    }
+
+    private void parsePointsForBarrels(BufferedReader reader) throws IOException {
+        String line = reader.readLine();
+        while (line != null) {
+            String[] splittedLine = getSplittedLine(line);
+            pointsForBarrels.add(
+                    new PointDirection(
+                            Integer.parseInt(splittedLine[0]),
+                            Integer.parseInt(splittedLine[1]),
+                            getDirectionByName(splittedLine[2].charAt(0))
+                    )
+            );
+            line = reader.readLine();
+        }
+    }
+
+    private void parseMap(BufferedReader reader) throws IOException {
+        map = new boolean[height][width];
+        int i = 0;
+        while (i < height) {
+            String line = reader.readLine();
+            int j = 0;
+            String[] splittedLine = getSplittedLine(line);
+            for (String sign : splittedLine) {
+                map[i][j] = sign.equals("1");
+                j++;
+            }
+            i++;
+        }
+    }
+
+    private Point parsePoint(String line) {
+        final String[] splittedLine = getSplittedLine(line);
+        return new Point(Integer.parseInt(splittedLine[0]),
+                Integer.parseInt(splittedLine[1]));
     }
 
     private Direction getDirectionByName(char name) {
@@ -98,7 +112,7 @@ public class Model implements Serializable {
                 )
         );
         player = new Player(this,
-                (int) startPoint.getX() ,
+                (int) startPoint.getX(),
                 (int) startPoint.getY()
         );
     }
