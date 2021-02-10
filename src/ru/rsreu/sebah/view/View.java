@@ -50,12 +50,7 @@ public class View implements Listener {
     @Override
     public void handle(Object object, EventType type) {
         if (type == EventType.INIT) {
-            root.getChildren().clear();
             initGame((Model) object);
-            root.setOnKeyPressed(a -> controller.addKey(a.getCode()));
-            root.setOnKeyReleased(a -> controller.removeKey());
-            MenuBar menuBar = createMenuBar(controller, root);
-            root.setTop(menuBar);
         }
         if (type == EventType.CREATE_ENTITY) {
             ((Entity) object).setObjectListener(createObjectListener(object));
@@ -87,41 +82,54 @@ public class View implements Listener {
     }
 
     private void initGame(Model model) {
+        root.getChildren().clear();
         root.setPrefSize(WIDTH_WINDOW, HEIGHT_WINDOW + HEIGHT_TOP_PANEL);
         for (int i = 0; i < model.getHeight(); i++) {
             for (int j = 0; j < model.getWidth(); j++) {
-                final int y = i;
-                final int x = j;
-                if (y == model.getFinalPoint().getY() && x == model.getFinalPoint().getX()) {
-                    Platform.runLater(() -> {
-                        Paint fillSquare = new Color(0, 0, 0, 0.1);
-                        final Rectangle finalRectangle = new Rectangle();
-                        finalRectangle.setX(x * WIDTH_SQUARE);
-                        finalRectangle.setY(y * WIDTH_SQUARE + HEIGHT_TOP_PANEL);
-                        finalRectangle.setHeight(WIDTH_SQUARE);
-                        finalRectangle.setWidth(WIDTH_SQUARE);
-                        finalRectangle.setFill(fillSquare);
-                        root.getChildren().add(finalRectangle);
-                    });
+                if (i == model.getFinalPoint().getY() && j == model.getFinalPoint().getX()) {
+                    drawFinalPoint(i, j);
                 }
-                if (x != 0 && model.getMap()[y][x - 1] != model.getMap()[y][x]) {
-                    Platform.runLater(() -> root.getChildren()
-                            .add(new Line(x * WIDTH_SQUARE, y * WIDTH_SQUARE + HEIGHT_TOP_PANEL, x * WIDTH_SQUARE,
-                                    (y + 1) * WIDTH_SQUARE + HEIGHT_TOP_PANEL)));
+                if (j != 0 && model.getMap()[i][j - 1] != model.getMap()[i][j]) {
+                    drawLine(i, j, j, i + 1);
                 }
 
-                if (y != 0 && model.getMap()[y - 1][x] != model.getMap()[y][x]) {
-                    Platform.runLater(() -> root.getChildren()
-                            .add(new Line(x * WIDTH_SQUARE, y * WIDTH_SQUARE + HEIGHT_TOP_PANEL,
-                                    (x + 1) * WIDTH_SQUARE, y * WIDTH_SQUARE + HEIGHT_TOP_PANEL)));
+                if (i != 0 && model.getMap()[i - 1][j] != model.getMap()[i][j]) {
+                    drawLine(i, j, j + 1, i);
                 }
             }
         }
+        drawTopLine();
+        createMenuBar(controller, root);
+
+        root.setOnKeyPressed(a -> controller.addKey(a.getCode()));
+        root.setOnKeyReleased(a -> controller.removeKey());
+    }
+
+    private void drawTopLine() {
         Platform.runLater(() -> root.getChildren()
                 .add(new Line(0, HEIGHT_TOP_PANEL, WIDTH_WINDOW, HEIGHT_TOP_PANEL)));
     }
 
-    private MenuBar createMenuBar(Controller controller, BorderPane root) {
+    private void drawLine(int y, int x, int x2, int i) {
+        Platform.runLater(() -> root.getChildren()
+                .add(new Line(x * WIDTH_SQUARE, y * WIDTH_SQUARE + HEIGHT_TOP_PANEL, x2 * WIDTH_SQUARE,
+                        (i) * WIDTH_SQUARE + HEIGHT_TOP_PANEL)));
+    }
+
+    private void drawFinalPoint(int y, int x) {
+        Platform.runLater(() -> {
+            Paint fillSquare = new Color(0, 0, 0, 0.1);
+            final Rectangle finalRectangle = new Rectangle();
+            finalRectangle.setX(x * WIDTH_SQUARE);
+            finalRectangle.setY(y * WIDTH_SQUARE + HEIGHT_TOP_PANEL);
+            finalRectangle.setHeight(WIDTH_SQUARE);
+            finalRectangle.setWidth(WIDTH_SQUARE);
+            finalRectangle.setFill(fillSquare);
+            root.getChildren().add(finalRectangle);
+        });
+    }
+
+    private void createMenuBar(Controller controller, BorderPane root) {
         MenuBar menuBar = new MenuBar();
         Menu gameMenu = new Menu(MENU_NAME);
         Menu openMenu = new Menu(OPEN_GAME_MENU_OPTION);
@@ -132,30 +140,38 @@ public class View implements Listener {
         closeMenu.setOnAction(event -> controller.exit());
         gameMenu.getItems().addAll(openMenu, saveMenu, closeMenu);
         menuBar.getMenus().add(gameMenu);
-        return menuBar;
+        root.setTop(menuBar);
     }
 
 
     private void showMessage(String message) {
         Platform.runLater(() -> {
-            Paint fillRect = new Color(GRAY_INTENSITY, GRAY_INTENSITY, GRAY_INTENSITY, 1);
-            Rectangle rectangle = new Rectangle();
-            rectangle.setX(WIN_MESSAGE_WINDOW_X);
-            rectangle.setY(WIN_MESSAGE_WINDOW_Y);
-            rectangle.setWidth(WIN_MESSAGE_WINDOWS_WIDTH);
-            rectangle.setHeight(WIN_MESSAGE_WINDOWS_HEIGHT);
-            rectangle.setFill(fillRect);
-            root.getChildren().add(rectangle);
-            final Label text = new Label(message);
-            text.setWrapText(true);
-            text.setMaxWidth(WIN_MESSAGE_WIDTH);
-            text.setMinWidth(WIN_MESSAGE_WIDTH);
-            text.setTranslateX(X_WON_MESSAGE);
-            text.setTranslateY(Y_WON_MESSAGE);
-            text.setFont(new Font(FONT_SIZE));
-            FlowPane fp = new FlowPane();
-            fp.getChildren().add(text);
-            root.setCenter(fp);
+            drawRectangle();
+            drawLabel(message);
         });
+    }
+
+    private void drawRectangle() {
+        Paint fillRect = new Color(GRAY_INTENSITY, GRAY_INTENSITY, GRAY_INTENSITY, 1);
+        Rectangle rectangle = new Rectangle();
+        rectangle.setX(WIN_MESSAGE_WINDOW_X);
+        rectangle.setY(WIN_MESSAGE_WINDOW_Y);
+        rectangle.setWidth(WIN_MESSAGE_WINDOWS_WIDTH);
+        rectangle.setHeight(WIN_MESSAGE_WINDOWS_HEIGHT);
+        rectangle.setFill(fillRect);
+        root.getChildren().add(rectangle);
+    }
+
+    private void drawLabel(String message) {
+        final Label text = new Label(message);
+        text.setWrapText(true);
+        text.setMaxWidth(WIN_MESSAGE_WIDTH);
+        text.setMinWidth(WIN_MESSAGE_WIDTH);
+        text.setTranslateX(X_WON_MESSAGE);
+        text.setTranslateY(Y_WON_MESSAGE);
+        text.setFont(new Font(FONT_SIZE));
+        FlowPane fp = new FlowPane();
+        fp.getChildren().add(text);
+        root.setCenter(fp);
     }
 }

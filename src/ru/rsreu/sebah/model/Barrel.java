@@ -26,14 +26,7 @@ public class Barrel extends Entity {
         Point posMax = new Point(posMaxX, posMaxY);
         final List<PointDirection> pointsForBarrels = modelGame.getPointsForBarrels();
         if (pos.equals(posMax)) {
-            final int n = modelGame.getNextDirection(pos);
-            if (n == pointsForBarrels.size() - 1) {
-                step = 0;
-                position.setX(pointsForBarrels.get(step).getX() + RADIUS);
-                position.setY(pointsForBarrels.get(step).getY() + View.HEIGHT_TOP_PANEL + RADIUS);
-            } else if (n != -1) {
-                step = n;
-            }
+            nextStep(pos, pointsForBarrels);
         }
         Direction direction = pointsForBarrels.get(step).getDirection();
         if (direction == Direction.RIGHT) {
@@ -42,6 +35,17 @@ public class Barrel extends Entity {
             moveLeft();
         } else if (direction == Direction.DOWN) {
             moveDown();
+        }
+    }
+
+    private void nextStep(Point pos, List<PointDirection> pointsForBarrels) {
+        final int n = modelGame.getNextDirection(pos);
+        if (n == pointsForBarrels.size() - 1) {
+            step = 0;
+            position.setX(pointsForBarrels.get(step).getX() + RADIUS);
+            position.setY(pointsForBarrels.get(step).getY() + View.HEIGHT_TOP_PANEL + RADIUS);
+        } else if (n != -1) {
+            step = n;
         }
     }
 }
